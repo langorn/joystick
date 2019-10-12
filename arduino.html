@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+    </style>
+  </head>
+  <body>
+
+    <button id="manualClose">Turn Off LED</button>
+    <div id="box" style="min-height:200px;min-width:30px;background-repeat:no-repeat;background-image:url('http://gambit.mit.edu/updates/assets_c/2010/02/rook-thumb-175x258-2088.jpg')"></div>
+
+
+
+  </body>
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+  <script>
+  var socket = io(); //io('http://127.0.0.1');
+  
+
+  /* switch off led */
+
+
+    $('#manualClose').click(function(){
+      socket.emit('manualClose','');
+    })
+    
+
+
+    /***********************
+        joystick related
+    ***********************/
+    socket.on('joystick-vertical',function(msg){
+
+      //in the middle , the default value
+      if(msg==519){
+        return
+      }
+      //lower than default value , then go left
+      if(msg<519){  
+        $('#box').animate({
+          'marginTop': '-=20px'
+        })
+      }
+      //larger than default value , then go right
+      if(msg>519){
+        $('#box').animate({
+          'marginTop': '+=20px'
+        })
+      }
+    })
+
+    socket.on('joystick-horizon',function(msg){
+      //in the middle , the default value
+      if(msg==503){
+        return
+      }
+
+      //lower than default value , then go left
+      if(msg<480){
+        $('#box').animate({
+          'marginLeft': '+=20px'
+        })
+      }
+
+      //larger than default value , then go right
+      if(msg>510){
+        $('#box').animate({
+          'marginLeft': '-=20px'
+        })
+
+      }
+      
+    })
+  </script>
+</html>
